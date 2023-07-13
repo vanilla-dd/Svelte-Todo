@@ -3,12 +3,24 @@
 	import Header from '../../components/Header.svelte';
 	import Form from '../../components/Form.svelte';
 	import Todos from '../../components/Todos.svelte';
+	let todos = [
+		{ id: 1, text: 'ehlo', completed: false },
+		{ id: 2, text: 'lo', completed: true },
+		{ id: 3, text: 'hlo', completed: false }
+	];
+	function onComplete(event) {
+		let updateId = event.detail.id;
+		todos.map((todo) => {
+			if (todo.id === updateId) todo.completed = !todo.completed;
+		});
+		todos = todos;
+	}
 </script>
 
 <!-- main container -->
 <div id="app-container" class="app-container">
 	<Header />
-	<Todos />
+	<Todos {todos} on:completed={onComplete} />
 	<Form />
 </div>
 
