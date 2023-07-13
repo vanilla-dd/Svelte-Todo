@@ -3,11 +3,18 @@
 	import Header from '../../components/Header.svelte';
 	import Form from '../../components/Form.svelte';
 	import Todos from '../../components/Todos.svelte';
+	let newText;
 	let todos = [
 		{ id: 1, text: 'ehlo', completed: false },
 		{ id: 2, text: 'lo', completed: true },
 		{ id: 3, text: 'hlo', completed: false }
 	];
+	let totalTodos;
+	let remainingTodos;
+	$: totalTodos = todos.length;
+	$: remainingTodos = todos.reduce((n, todo) => {
+		return n + (todo.completed ? 0 : 1);
+	}, 0);
 	function onComplete(event) {
 		let updateId = event.detail.id;
 		todos.map((todo) => {
@@ -15,13 +22,27 @@
 		});
 		todos = todos;
 	}
+	function createTodo() {
+		newText = newText.trim();
+		if (newText !== '') {
+			let newId = Math.max(...todos.map((e) => e.id)) + 1;
+			todos = [...todos, { id: newId, text: newText, completed: false }];
+		}
+		newText = '';
+	}
+	function deleteTodo(event) {
+		let delId = event.detail.id;
+		todos = todos.filter((todo) => {
+			return todo.id != delId;
+		});
+	}
 </script>
 
 <!-- main container -->
 <div id="app-container" class="app-container">
-	<Header />
-	<Todos {todos} on:completed={onComplete} />
-	<Form />
+	<Header {totalTodos} {remainingTodos} />
+	<Todos {todos} on:completed={onComplete} on:delete={deleteTodo} />
+	<Form bind:newText on:create={createTodo} />
 </div>
 
 <!-- styles for main container -->

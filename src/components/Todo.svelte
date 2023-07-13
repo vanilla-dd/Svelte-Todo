@@ -1,4 +1,5 @@
 <script>
+	import { fly } from 'svelte/transition';
 	import { createEventDispatcher } from 'svelte';
 	export let itemText;
 	export let completed;
@@ -7,9 +8,15 @@
 	function markCheck(id) {
 		dispatch('completed', { id: id });
 	}
+	function deleteTodo(id) {
+		dispatch('delete', { id: id });
+	}
 </script>
 
-<li class="todo-list list-item-view {completed ? 'completed' : ''}">
+<li
+	transition:fly={{ y: 200, duration: 500 }}
+	class="todo-list list-item-view {completed ? 'completed' : ''}"
+>
 	<span>
 		<button
 			on:click={markCheck(itemId)}
@@ -17,7 +24,7 @@
 		/>
 		<span>{itemText}</span>
 	</span>
-	<button class="btn btn-delete fa-solid fa-trash" />
+	<button on:click={deleteTodo(itemId)} class="btn btn-delete fa-solid fa-trash" />
 </li>
 
 <!-- styles for each todo -->

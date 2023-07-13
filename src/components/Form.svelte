@@ -1,7 +1,16 @@
+<script>
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
+	export let newText;
+	function create() {
+		dispatch('create');
+	}
+</script>
+
 <!-- Add form at bottom -->
 <div class="app-form">
-	<input placeholder="Add Todo.." type="text" class="input-text" name="" />
-	<button class="btn fa-solid fa-plus" />
+	<input bind:value={newText} placeholder="Add Todo.." type="text" class="input-text" name="" />
+	<button on:click={create} class="btn fa-solid fa-plus" />
 </div>
 
 <!-- styles for form -->

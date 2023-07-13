@@ -7,7 +7,13 @@
 <div class="app-body">
 	<ul>
 		{#each todos as todo}
-			<Todo on:completed itemId={todo.id} itemText={todo.text} completed={todo.completed} />
+			<Todo
+				on:completed
+				itemId={todo.id}
+				itemText={todo.text}
+				completed={todo.completed}
+				on:delete
+			/>
 		{/each}
 	</ul>
 </div>
