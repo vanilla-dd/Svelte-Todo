@@ -3,14 +3,30 @@
 	import Header from '../../components/Header.svelte';
 	import Form from '../../components/Form.svelte';
 	import Todos from '../../components/Todos.svelte';
+	import { onMount, afterUpdate } from 'svelte';
+	import { browser } from '$app/environment';
+	const TodosLocal = browser && JSON.parse(localStorage.getItem('todos'));
 	let newText;
-	let todos = [
-		{ id: 1, text: 'ehlo', completed: false },
-		{ id: 2, text: 'lo', completed: true },
-		{ id: 3, text: 'hlo', completed: false }
-	];
+	let todos = [];
 	let totalTodos;
 	let remainingTodos;
+	onMount(() => {
+		loadTodos();
+	});
+
+	afterUpdate(() => {
+		saveTodos();
+	});
+	function loadTodos() {
+		const TodosLocal = browser && JSON.parse(localStorage.getItem('todos'));
+		if (TodosLocal) {
+			todos = TodosLocal;
+		}
+	}
+
+	function saveTodos() {
+		browser && localStorage.setItem('todos', JSON.stringify(todos));
+	}
 	$: totalTodos = todos.length;
 	$: remainingTodos = todos.reduce((n, todo) => {
 		return n + (todo.completed ? 0 : 1);
@@ -25,7 +41,7 @@
 	function createTodo() {
 		newText = newText.trim();
 		if (newText !== '') {
-			let newId = Math.max(...todos.map((e) => e.id)) + 1;
+			const newId = todos.length ? Math.max(...todos.map((e) => e.id)) + 1 : 1;
 			todos = [...todos, { id: newId, text: newText, completed: false }];
 		}
 		newText = '';

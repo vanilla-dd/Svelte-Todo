@@ -45,7 +45,7 @@
 	}
 
 	.btn:focus {
-		outline: none;
+		outline: 10px white;
 	}
 
 	.btn-delete {
